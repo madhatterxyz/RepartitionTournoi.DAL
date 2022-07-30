@@ -1,8 +1,8 @@
-﻿using RepartitionTournoi.Models;
+﻿using RepartitionTournoi.DAL.Entities;
+using RepartitionTournoi.Models;
 
 namespace RepartitionTournoi.DAL.Interfaces;
-public interface IJoueurDAL
+public interface IJoueurDAL : IRepository<Joueur>
 {
-    IEnumerable<Joueur> All();
-    Joueur GetById(int id);
+    JoueurDTO Convert(Joueur joueur);
 }

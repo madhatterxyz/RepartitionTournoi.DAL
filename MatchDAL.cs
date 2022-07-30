@@ -1,18 +1,17 @@
 ﻿using RepartitionTournoi.DAL.Entities;
 using RepartitionTournoi.DAL.Interfaces;
-using RepartitionTournoi.Models;
 
 namespace RepartitionTournoi.DAL
 {
-    public class JeuDAL : IJeuDAL
+    public class MatchDAL : IMatchDAL
     {
         private readonly RepartitionTournoiContext _dbContext;
-        public JeuDAL(RepartitionTournoiContext dbContext)
+        public MatchDAL(RepartitionTournoiContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public async Task<Jeu> Create(Jeu entity)
+        public async Task<Match> Create(Match entity)
         {
             throw new NotImplementedException();
         }
@@ -22,23 +21,19 @@ namespace RepartitionTournoi.DAL
             throw new NotImplementedException();
         }
 
-        public async Task<List<Jeu>> GetAll()
+        public async Task<List<Match>> GetAll()
         {
-            return _dbContext.Jeus.ToList();
+            return _dbContext.Matches.ToList();
         }
 
-        public async Task<Jeu> GetById(long id)
+        public async Task<Match?> GetById(long id)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Jeu> Update(Jeu entity)
+        public async Task<Match> Update(Match entity)
         {
             throw new NotImplementedException();
-        }
-        public JeuDTO Convert(Jeu jeu)
-        {
-            return new JeuDTO(jeu.Id, jeu.Nom, jeu.NbJoueursMin, jeu.NbJoueursMax);
         }
     }
 }
