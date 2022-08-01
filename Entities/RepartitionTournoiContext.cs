@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace RepartitionTournoi.DAL.Entities
 {
@@ -16,6 +19,7 @@ namespace RepartitionTournoi.DAL.Entities
         public virtual DbSet<Jeu> Jeus { get; set; } = null!;
         public virtual DbSet<Joueur> Joueurs { get; set; } = null!;
         public virtual DbSet<Match> Matches { get; set; } = null!;
+        public virtual DbSet<Mecanique> Mecaniques { get; set; } = null!;
         public virtual DbSet<Score> Scores { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -29,6 +33,11 @@ namespace RepartitionTournoi.DAL.Entities
                 entity.ToTable("Jeu");
 
                 entity.Property(e => e.Nom).HasMaxLength(100);
+
+                entity.HasOne(d => d.Mecanique)
+                    .WithMany(p => p.Jeus)
+                    .HasForeignKey(d => d.MecaniqueId)
+                    .HasConstraintName("FK__Jeu__MecaniqueId__45F365D3");
             });
 
             modelBuilder.Entity<Joueur>(entity =>
@@ -51,6 +60,13 @@ namespace RepartitionTournoi.DAL.Entities
                     .HasForeignKey(d => d.JeuId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Match__JeuId__3C69FB99");
+            });
+
+            modelBuilder.Entity<Mecanique>(entity =>
+            {
+                entity.ToTable("Mecanique");
+
+                entity.Property(e => e.Nom).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Score>(entity =>

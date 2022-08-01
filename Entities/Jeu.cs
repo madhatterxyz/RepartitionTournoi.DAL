@@ -14,7 +14,9 @@ namespace RepartitionTournoi.DAL.Entities
         public string Nom { get; set; } = null!;
         public int NbJoueursMin { get; set; }
         public int NbJoueursMax { get; set; }
+        public long? MecaniqueId { get; set; }
 
+        public virtual Mecanique? Mecanique { get; set; }
         public virtual ICollection<Match> Matches { get; set; }
     }
 }
