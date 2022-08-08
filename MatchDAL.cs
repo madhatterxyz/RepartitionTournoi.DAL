@@ -13,7 +13,9 @@ namespace RepartitionTournoi.DAL
 
         public async Task<Match> Create(Match entity)
         {
-            throw new NotImplementedException();
+            _dbContext.Matches.Add(entity);
+            await _dbContext.SaveChangesAsync();
+            return entity;
         }
 
         public async Task DeleteById(long id)

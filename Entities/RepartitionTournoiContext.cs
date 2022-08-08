@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace RepartitionTournoi.DAL.Entities
 {
@@ -13,22 +16,57 @@ namespace RepartitionTournoi.DAL.Entities
         {
         }
 
+        public virtual DbSet<Composition> Compositions { get; set; } = null!;
         public virtual DbSet<Jeu> Jeus { get; set; } = null!;
         public virtual DbSet<Joueur> Joueurs { get; set; } = null!;
         public virtual DbSet<Match> Matches { get; set; } = null!;
+        public virtual DbSet<Mecanique> Mecaniques { get; set; } = null!;
         public virtual DbSet<Score> Scores { get; set; } = null!;
+        public virtual DbSet<Tournoi> Tournois { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            //Scaffold-DbContext 'Data Source=PC-NICOLAS;Initial Catalog=RepartitionTournoi;integrated security=true' Microsoft.EntityFrameworkCore.SqlServer -o Entities -f
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Composition>(entity =>
+            {
+                entity.HasKey(e => new { e.MatchId, e.JeuId, e.TournoiId })
+                    .HasName("PK_MatchTournoiJeu");
+
+                entity.ToTable("Composition");
+
+                entity.HasOne(d => d.Jeu)
+                    .WithMany(p => p.Compositions)
+                    .HasForeignKey(d => d.JeuId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__MatchTour__JeuId__628FA481");
+
+                entity.HasOne(d => d.Match)
+                    .WithMany(p => p.Compositions)
+                    .HasForeignKey(d => d.MatchId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__MatchTour__Match__619B8048");
+
+                entity.HasOne(d => d.Tournoi)
+                    .WithMany(p => p.Compositions)
+                    .HasForeignKey(d => d.TournoiId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__MatchTour__Tourn__6383C8BA");
+            });
+
             modelBuilder.Entity<Jeu>(entity =>
             {
                 entity.ToTable("Jeu");
 
                 entity.Property(e => e.Nom).HasMaxLength(100);
+
+                entity.HasOne(d => d.Mecanique)
+                    .WithMany(p => p.Jeus)
+                    .HasForeignKey(d => d.MecaniqueId)
+                    .HasConstraintName("FK__Jeu__MecaniqueId__45F365D3");
             });
 
             modelBuilder.Entity<Joueur>(entity =>
@@ -46,17 +84,19 @@ namespace RepartitionTournoi.DAL.Entities
             {
                 entity.ToTable("Match");
 
-                entity.HasOne(d => d.Jeu)
-                    .WithMany(p => p.Matches)
-                    .HasForeignKey(d => d.JeuId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Match__JeuId__3C69FB99");
+                entity.Property(e => e.Nom).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<Mecanique>(entity =>
+            {
+                entity.ToTable("Mecanique");
+
+                entity.Property(e => e.Nom).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Score>(entity =>
             {
-                entity.HasKey(e => new { e.MatchId, e.JoueurId })
-                    .HasName("PK_Person");
+                entity.HasKey(e => new { e.MatchId, e.JoueurId });
 
                 entity.ToTable("Score");
 
@@ -64,13 +104,20 @@ namespace RepartitionTournoi.DAL.Entities
                     .WithMany(p => p.Scores)
                     .HasForeignKey(d => d.JoueurId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Joueur");
+                    .HasConstraintName("FK__Score__JoueurId__5441852A");
 
                 entity.HasOne(d => d.Match)
                     .WithMany(p => p.Scores)
                     .HasForeignKey(d => d.MatchId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Match");
+                    .HasConstraintName("FK__Score__MatchId__534D60F1");
+            });
+
+            modelBuilder.Entity<Tournoi>(entity =>
+            {
+                entity.ToTable("Tournoi");
+
+                entity.Property(e => e.Nom).HasMaxLength(50);
             });
 
             OnModelCreatingPartial(modelBuilder);

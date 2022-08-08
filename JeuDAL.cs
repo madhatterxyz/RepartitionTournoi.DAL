@@ -1,4 +1,5 @@
-﻿using RepartitionTournoi.DAL.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using RepartitionTournoi.DAL.Entities;
 using RepartitionTournoi.DAL.Interfaces;
 using RepartitionTournoi.Models;
 
@@ -24,7 +25,7 @@ namespace RepartitionTournoi.DAL
 
         public async Task<List<Jeu>> GetAll()
         {
-            return _dbContext.Jeus.ToList();
+            return await _dbContext.Jeus.ToListAsync();
         }
 
         public async Task<Jeu> GetById(long id)

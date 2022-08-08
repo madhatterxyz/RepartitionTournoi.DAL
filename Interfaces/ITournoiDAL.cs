@@ -2,7 +2,7 @@
 using RepartitionTournoi.Models;
 
 namespace RepartitionTournoi.DAL.Interfaces;
-public interface IJeuDAL : IRepository<Jeu>
+public interface ITournoiDAL : IRepository<Tournoi>
 {
-    JeuDTO Convert(Jeu joueur);
+    TournoiDTO Convert(Tournoi joueur);
 }

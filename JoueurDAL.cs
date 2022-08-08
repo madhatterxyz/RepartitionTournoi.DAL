@@ -44,7 +44,7 @@ namespace RepartitionTournoi.DAL
         public async Task<Joueur> Update(Joueur entity)
         {
             var joueurToUpdate = _dbContext.Joueurs.Find(entity.Id);
-            if(joueurToUpdate == null)
+            if (joueurToUpdate == null)
             {
                 throw new Exception($"Joueur {entity.Id} not found.");
             }
@@ -52,7 +52,7 @@ namespace RepartitionTournoi.DAL
             joueurToUpdate.Prénom = entity.Prénom;
             joueurToUpdate.Nom = entity.Nom;
             await _dbContext.SaveChangesAsync();
-            return joueurToUpdate; 
+            return joueurToUpdate;
         }
         public JoueurDTO Convert(Joueur joueur)
         {

@@ -7,14 +7,16 @@ namespace RepartitionTournoi.DAL.Entities
     {
         public Jeu()
         {
-            Matches = new HashSet<Match>();
+            Compositions = new HashSet<Composition>();
         }
 
         public long Id { get; set; }
         public string Nom { get; set; } = null!;
         public int NbJoueursMin { get; set; }
         public int NbJoueursMax { get; set; }
+        public long? MecaniqueId { get; set; }
 
-        public virtual ICollection<Match> Matches { get; set; }
+        public virtual Mecanique? Mecanique { get; set; }
+        public virtual ICollection<Composition> Compositions { get; set; }
     }
 }
